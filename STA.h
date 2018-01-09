@@ -21,3 +21,33 @@ enum STABasis
 	e1e2e3,
 	e0e1e2e3,
 };
+
+struct STAMV
+{
+	float e0;
+	float e1;
+	float e2;
+	float e3;
+	float e0e1;
+	float e0e2;
+	float e0e3;
+	float e1e2;
+	float e1e3;
+	float e2e3;
+	float e0e1e2;
+	float e0e1e3;
+	float e0e2e3;
+	float e1e2e3;
+	float e0e1e2e3;
+};
+
+struct STARotor
+{
+	float e0e1;
+	float e0e2;
+	float e0e3;
+	float e1e2;
+	float e1e3;
+	float e2e3;
+	float e0e1e2e3;
+};

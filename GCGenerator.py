@@ -90,7 +90,7 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
     return (parity, tmp1)
 
 # BasisVecOuterProduct - Compute the outer product of two basis vectors
-# in an algebra.
+# in a geometric algebra.
 
 def BasisVecOuterProduct(vec1, vec2, signature) :
 
@@ -161,6 +161,81 @@ def WriteBasisEnum(file, algebraName, basisVecs) :
 
     file.write("\n};")
 
+# WriteMultiVecStruct - Write a structure definition for a general multivector
+# in a given geometric algebra.
+
+def WriteMultivecStruct(file, algebraName, basisVecs) :
+
+    file.write("\n\nstruct " + algebraName + "MV")
+    file.write("\n{")
+
+    for vec in basisVecs:
+
+        file.write("\n\tfloat ")
+
+        for oneVec in vec :
+
+            file.write(oneVec)
+
+        file.write(";")
+
+    file.write("\n};")
+
+# WriteMultiVecStruct - Write a structure definition for an even multivector
+# in a given geometric algebra.
+
+def WriteRotorStruct(file, algebraName, basisVecs) :
+
+    file.write("\n\nstruct " + algebraName + "Rotor")
+    file.write("\n{")
+
+    for vec in basisVecs:
+
+        if len(vec) % 2 == 0 :
+
+            file.write("\n\tfloat ")
+
+            for oneVec in vec :
+
+                file.write(oneVec)
+
+            file.write(";")
+
+    file.write("\n};")
+
+# WriteOperators -
+
+def WriteOperators(file, algebraName, basisVecs) :
+
+    WriteAddOperators(file, algebraName, basisVecs)
+    WriteSubtractOperators(file, algebraName, basisVecs)
+    WriteMultiplyOperators(file, algebraName, basisVecs)
+    WriteDivideOperators(file, algebraName, basisVecs)
+
+# WriteAddOperators -
+
+def WriteAddOperators(file, algebraName, basisVecs) :
+
+    return
+
+# WriteSubtractOperators -
+
+def WriteSubtractOperators(file, algebraName, basisVecs) :
+
+    return
+
+# WriteMultiplyOperators -
+
+def WriteMultiplyOperators(file, algebraName, basisVecs) :
+
+    return
+
+# WriteDivideOperators -
+
+def WriteDivideOperators(file, algebraName, basisVecs) :
+
+    return
+
 # GenerateAlgebra - Given an algebra signature and input name, generate its geometric
 # algebra and generate C++ code for this algebra.
 
@@ -180,10 +255,12 @@ def GenerateAlgebra(algebraName, signature) :
 
     WriteIncludes(outFile)
     WriteBasisEnum(outFile, algebraName, basisVecs)
+    WriteMultivecStruct(outFile, algebraName, basisVecs)
+    WriteRotorStruct(outFile, algebraName, basisVecs)
 
 # Main
 
-signature = [ 1, -1, -1, -1 ]
+signature = [ 1, 1, 1, 1 ]
 
 GenerateAlgebra("STA", signature)
 print("Done")
