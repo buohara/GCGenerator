@@ -1,10 +1,13 @@
 #include <vector>
 #include <map>
 #include <stdio>
+#include <stdint.h>
+
 using namespace std;
 
 enum STABasis
 {
+	s,
 	e0,
 	e1,
 	e2,
@@ -24,30 +27,45 @@ enum STABasis
 
 struct STAMV
 {
-	float e0;
-	float e1;
-	float e2;
-	float e3;
-	float e0e1;
-	float e0e2;
-	float e0e3;
-	float e1e2;
-	float e1e3;
-	float e2e3;
-	float e0e1e2;
-	float e0e1e3;
-	float e0e2e3;
-	float e1e2e3;
-	float e0e1e2e3;
+	const uint32_t numCoeffs = 16;
+	float coeffs[numCoeffs];
+
+	STAMV& operator=(const STAMV& rhs)
+	{
+		if (this != &rhs)
+		{
+			for (uint32_t i = 0; i < numCoeffs; i++)
+			{
+				coeffs[i] = rhs.coeffs[i];
+			}
+		}
+		return *this;
+	}
+
+	STAMV& operator+=(const STAMV& rhs)
+	{
+		for (uint32_t i = 0; i < numCoeffs; i++)
+		{
+			coeffs[i] += rhs.coeffs[i];
+		}
+		return *this;
+	}
+
+	STAMV& operator-=(const STAMV& rhs)
+	{
+		for (uint32_t i = 0; i < numCoeffs; i++)
+		{
+			coeffs[i] -= rhs.coeffs[i];
+		}
+		return *this;
+	}
+
 };
 
 struct STARotor
 {
-	float e0e1;
-	float e0e2;
-	float e0e3;
-	float e1e2;
-	float e1e3;
-	float e2e3;
-	float e0e1e2e3;
+	const uint32_t numCoeffs = 8.0;
+	float coeffs[numCoeffs];
+
 };
+

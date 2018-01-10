@@ -4,10 +4,11 @@ import itertools
 
 def WriteIncludes(file) :
 
-    file.write("#include <vector>")
-    file.write("\n#include <map>")
-    file.write("\n#include <stdio>")
-    file.write("\nusing namespace std;\n")
+    file.write("#include <vector>\n")
+    file.write("#include <map>\n")
+    file.write("#include <stdio>\n")
+    file.write("#include <stdint.h>\n\n")
+    file.write("using namespace std;\n\n")
 
 # GenerateBasis - Given an algebra signature, generate all basis vectors
 # for this algebra.
@@ -16,6 +17,7 @@ def GenerateBasis(signature, basisVecs) :
 
     oneVecs         = []
     basisCounter    = 0
+    basisVecs.append("s")
 
     for item in signature :
 
@@ -29,7 +31,9 @@ def GenerateBasis(signature, basisVecs) :
       
             basisVecs.append(list(cmb))
 
-# Get parity -
+# Get parity - Determine sign of permutation required to transform a basis
+# vec into a basis vec with indices in ascending order. E.g., e2e1e3 -> e1e2e3
+# has parity -1.
 
 def GetParity(vec) :
 
@@ -54,6 +58,14 @@ def GetParity(vec) :
 # in an algebra.
 
 def BasisVecInnerProduct(vec1, vec2, signature) :
+
+    if vec1 == 's' :
+
+        return (1, list(vec2))
+
+    if vec2 == 's' :
+
+        return (1, list(vec1))
 
     intsc = set(vec1).intersection(vec2) 
     if len(intsc) == 0 :
@@ -93,6 +105,14 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 # in a geometric algebra.
 
 def BasisVecOuterProduct(vec1, vec2, signature) :
+
+    if vec1 == 's' :
+
+        return (0, '')
+
+    if vec2 == 's' :
+
+        return (0, '')
 
     if len(set(vec1).intersection(vec2)) > 0 :
 
@@ -146,93 +166,126 @@ def GenerateProductTables(basisVecs, signature, innerProductTable, outerProductT
 
 def WriteBasisEnum(file, algebraName, basisVecs) :
 
-    file.write("\nenum " + algebraName + "Basis")
-    file.write("\n{")
+    file.write("enum " + algebraName + "Basis\n")
+    file.write("{\n")
    
     for vec in basisVecs :
 
-        file.write("\n\t")
+        file.write("\t")
 
         for oneVec in vec :
 
             file.write(oneVec)
 
-        file.write(",")
+        file.write(",\n")
 
-    file.write("\n};")
+    file.write("};\n\n")
 
 # WriteMultiVecStruct - Write a structure definition for a general multivector
 # in a given geometric algebra.
 
 def WriteMultivecStruct(file, algebraName, basisVecs) :
 
-    file.write("\n\nstruct " + algebraName + "MV")
-    file.write("\n{")
+    file.write("struct " + algebraName + "MV\n")
+    file.write("{\n")
+    file.write("\tconst uint32_t numCoeffs = " + str(len(basisVecs)) + ";\n")
+    file.write("\tfloat coeffs[numCoeffs];\n\n")
 
-    for vec in basisVecs:
+    WriteFullOperators(file, algebraName, basisVecs)
 
-        file.write("\n\tfloat ")
-
-        for oneVec in vec :
-
-            file.write(oneVec)
-
-        file.write(";")
-
-    file.write("\n};")
+    file.write("};\n\n")
 
 # WriteMultiVecStruct - Write a structure definition for an even multivector
 # in a given geometric algebra.
 
 def WriteRotorStruct(file, algebraName, basisVecs) :
 
-    file.write("\n\nstruct " + algebraName + "Rotor")
-    file.write("\n{")
+    file.write("struct " + algebraName + "Rotor\n")
+    file.write("{\n")
+    file.write("\tconst uint32_t numCoeffs = " + str(len(basisVecs) / 2) + ";\n")
+    file.write("\tfloat coeffs[numCoeffs];\n\n")
+    file.write("};\n\n")
 
-    for vec in basisVecs:
+# WriteFullOperators - Write arithmetic operators for general multivectors.
 
-        if len(vec) % 2 == 0 :
+def WriteFullOperators(file, algebraName, basisVecs) :
 
-            file.write("\n\tfloat ")
+    WriteFullEqualityOperators(file, algebraName, basisVecs)
+    WriteFullAddOperators(file, algebraName, basisVecs)
+    WriteFullSubtractOperators(file, algebraName, basisVecs)
+    WriteFullMultiplyOperators(file, algebraName, basisVecs)
+    WriteFullDivideOperators(file, algebraName, basisVecs)
 
-            for oneVec in vec :
+# WriteFullEqualityOperators -
 
-                file.write(oneVec)
+def WriteFullEqualityOperators(file, algebraName, basisVecs) :
 
-            file.write(";")
+    structName = algebraName + "MV"
 
-    file.write("\n};")
+    file.write("\t" + structName + "& operator=(const " + structName + "& rhs)\n")
+    file.write("\t{\n")
+    file.write("\t\tif (this != &rhs)\n")
+    file.write("\t\t{\n")
 
-# WriteOperators -
+    file.write("\t\t\tfor (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("\t\t\t{\n")
+    file.write("\t\t\t\tcoeffs[i] = rhs.coeffs[i];\n")
+    file.write("\t\t\t}\n")
 
-def WriteOperators(file, algebraName, basisVecs) :
+    file.write("\t\t}\n")
+    file.write("\t\treturn *this;\n")
+    file.write("\t}\n\n")
 
-    WriteAddOperators(file, algebraName, basisVecs)
-    WriteSubtractOperators(file, algebraName, basisVecs)
-    WriteMultiplyOperators(file, algebraName, basisVecs)
-    WriteDivideOperators(file, algebraName, basisVecs)
+# WriteFullAddOperators - Write addition operators for general multivectors.
 
-# WriteAddOperators -
+def WriteFullAddOperators(file, algebraName, basisVecs) :
 
-def WriteAddOperators(file, algebraName, basisVecs) :
+    structName = algebraName + "MV"
+    file.write("\t" + structName + "& operator+=(const " + structName + "& rhs)\n")
+    file.write("\t{\n")
+    file.write("\t\tfor (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("\t\t{\n")
+    file.write("\t\t\tcoeffs[i] += rhs.coeffs[i];\n")
+    file.write("\t\t}\n")
+    file.write("\t\treturn *this;\n")
+    file.write("\t}\n\n")
+    
+    return
+
+# WriteFullSubtractOperators - Write subtraction operators for general multivectors.
+
+def WriteFullSubtractOperators(file, algebraName, basisVecs) :
+
+    structName = algebraName + "MV"
+    file.write("\t" + structName + "& operator-=(const " + structName + "& rhs)\n")
+    file.write("\t{\n")
+    file.write("\t\tfor (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("\t\t{\n")
+    file.write("\t\t\tcoeffs[i] -= rhs.coeffs[i];\n")
+    file.write("\t\t}\n")
+    file.write("\t\treturn *this;\n")
+    file.write("\t}\n\n")
 
     return
 
-# WriteSubtractOperators -
+# WriteFullMultiplyOperators - Write multiplication operators for general multivectors.
 
-def WriteSubtractOperators(file, algebraName, basisVecs) :
+def WriteFullMultiplyOperators(file, algebraName, basisVecs) :
 
+    structName = algebraName + "MV"
+    file.write("\t" + structName + "& operator|=(const " + structName + "& rhs)\n")
+    file.write("\t{\n")
+    file.write("\t\tfor (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("\t\t{\n")
+    file.write("\t\t\tcoeffs[i] -= rhs.coeffs[i];\n")
+    file.write("\t\t}\n")
+    file.write("\t\treturn *this;\n")
+    file.write("\t}\n\n")
     return
 
-# WriteMultiplyOperators -
+# WriteFullDivideOperators - Write division operators for general multivectors.
 
-def WriteMultiplyOperators(file, algebraName, basisVecs) :
-
-    return
-
-# WriteDivideOperators -
-
-def WriteDivideOperators(file, algebraName, basisVecs) :
+def WriteFullDivideOperators(file, algebraName, basisVecs) :
 
     return
 
@@ -260,7 +313,6 @@ def GenerateAlgebra(algebraName, signature) :
 
 # Main
 
-signature = [ 1, 1, 1, 1 ]
-
+signature = [ 1, -1, -1, -1 ]
 GenerateAlgebra("STA", signature)
 print("Done")
