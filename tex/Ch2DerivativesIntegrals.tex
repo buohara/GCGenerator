@@ -1,0 +1,58 @@
+\chapter{Derivatives, Integrals, and Geometric Calculus}
+
+	\section{The Geometric Derivative}
+	
+	Geometric Algebra is extended to Geometric Calculus by adding geometric derivatives and integrals. The geometric derivative is denoted by $\nabla$ and acts on multivector-valued functions over a given domain. In summation notation, the geometric derivative of a function $F$ is:
+	
+	\[
+	\nabla F\left( x\right)  = e_i\partial_i F \left( x\right).
+	\]
+	
+	The following sections demonstrate the geometric derivative in example spaces.
+	
+	\subsection{Euclidean 2-Space}
+	
+	\subsubsection{Real-valued Functions}
+	
+	Consider a real-valued function $f$ over $x$ and $y$ in Euclidean 2-space. Its geometric derivative is
+	
+	\[
+	\nabla f = \left( \partial_x f\right) e_1  + \left( \partial_y f\right) e_2,
+	\]
+	
+	i.e., the geometric derivative of a real-valued function is its gradient.
+	
+	\subsubsection{Vector-valued Functions}
+	
+	Now consider a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2.$ It's derivative is
+	
+	\begin{align*}
+	\nabla g & = \left(e_1\partial_x + e_2\partial_y \right) \left(ue_1 + ve_2 \right) \\
+	 & = \left( \partial_x u + \partial_y v\right) + \left( \partial_x v - \partial_y u\right)e_1e_2,  
+	\end{align*}
+	
+	i.e., the derivative of a vector-valued function in Euclidean 2-space is the complex derivative. From this example, we see that geometric derivatives have inner and outer products,
+	
+	\[
+	\nabla F = \nabla \cdot F + \nabla \wedge F.
+	\]
+	
+	The geometric derivative contains both divergence and curl from traditional vector calculus.
+	
+	\subsection{Euclidean 3-Space}
+	
+	\subsubsection{Real-valued Functions}
+	
+	The geometric derivative acting on a real-valued function $f$ in 3-space is
+	
+	\[
+	\nabla f = \left( \partial_x f\right) e_1  + \left( \partial_y f\right) e_2 + \left( \partial_z f\right) e_3.
+	\]
+	
+	Again, this is simply the gradient of $f$.
+	
+	\subsubsection{Vector-valued Functions}
+	
+	\subsection{Minkowski Spacetime}
+	
+	\section{Cauchy's Integral Theorem and Formula}

@@ -1,0 +1,153 @@
+\chapter{Introduction}
+	
+	The objects of a geometric algebra are called \emph{multivectors}. Multivectors generalize objects like directed lines, planes, and volumes. An important property of multivectors is they have \emph{orientation}, i.e., a sense of up/down, inside/outside, etc. The following sections introduce examples of geometric algebras and the operations on their multivectors.
+	\section{2D Euclidean Space and $U(1)$}
+	\subsection{Geometric Algebra of Euclidean 2-Space}
+	Multivectors are composed of \emph{basis one-vectors}. In Euclidean 2-space, these are unit factors along the positive $x$ and $y$ axes. They are denoted by $e_1$ and $e_2$, respectively (the use of $e$ here is shorthand for Euclidean. Different symbols may be used for bases in other algebras, as will be seen later).
+	
+	The most important operation between multivectors is the \emph{geometric product}. If $a$ and $b$ are multivectors, the geometric product of $a$ and $b$ is written $ab$. The geometric product is the sum of two simpler products, the \emph{dot} (inner) and \emph{wedge} (outer) products. In Euclidean 2-space, these are equivalent to the familiar dot and cross products of vector algebra. The dot product of $a$ and $b$ is written $a \cdot b$ and the wedge product is written $a \wedge b$. The geometric product, then, is written
+	\[
+	ab = a \cdot b + a \wedge b.
+	\]
+	
+	The inner products of basis one-vectors amongst themselves defines the \emph{signature} of an algebra,	
+	\begin{align*}
+	e_1 \cdot e_1 & = 1\\
+	e_2 \cdot e_2 & = 1\\	
+	e_1 \cdot e_2 & = 0
+	\end{align*}	
+	Basis one-vectors represent directed unit lines. An oriented plane can be made by wedging the one-vectors together to form a basis \emph{bivector}.	
+	\begin{align*}		
+	e_1 \wedge e_2 & = x\text{-}y\text{ plane, counterclockwise orientation }\\
+	e_1 \wedge e_1 & = 0\\
+	e_2 \wedge e_2 & = 0
+	\end{align*}
+	The plane can be flipped by reversing the wedge product.
+	\begin{align*}		
+	e_2 \wedge e_1 & = -e_1 \wedge e_2 = x\text{-}y\text{ plane, clockwise orientation }
+	\end{align*}
+	More generally, dot products are \emph{symmetric} and wedge products are \emph{antisymmetric}
+	\[
+	\frac{1}{2}(ab + ba) = \frac{1}{2}(a \cdot b + a \wedge b + b \cdot a + b \wedge a) = a \cdot b,
+	\]
+	\[
+	\frac{1}{2}(ab - ba) = \frac{1}{2}(a \cdot b + a \wedge b - b \cdot a - b \wedge a) = a \wedge b.
+	\]
+	
+	Since unit vectors are \emph{orthogonal},
+	\begin{align*}
+	e_ie_j & = e_i \cdot e_j + e_i \wedge e_j = 1 & (i = j)\\
+	e_ie_j & = e_i \cdot e_j + e_i \wedge e_j = e_i \wedge e_j & (i \ne j)
+	\end{align*}
+	explicit dots and wedges are unnecessary when writing basis vectors. We simply write $e_1e_2$ instead of $e_1 \wedge e_2$.
+	
+	The basis vector formed by multiplying all basis one-vectors is called the \emph{unit pseudoscalar} and is denoted by $I$. In 2-space, $I = e_1e_2$. This is in direct analogy to $i = \sqrt{-1}$ from complex numbers, as shown below.
+	
+	A basis \emph{zero-vector} is a scalar.
+	
+	A general multivector $m$ in Euclicean 2-space is a linear combination of basis vectors,
+	\[
+	m = s + a_1e_1 + a_2e_2 + be_1e_2.
+	\]
+	The following formula is seldom used\footnote{One application is coding computer algebra systems.}, but for completeness, the product of two general multivectors,
+	\begin{align*}
+	m &= s + a_1e_1 + a_2e_2 + be_1e_2,\\
+	n &= r + c_1e_1 + c_2e_2 + de_1e_2
+	\end{align*}
+	is
+	\begin{align*}
+	mn &= (rs + a_1b_1 + a_2b_2 - bd)\\
+	&+ (ra_1 + sc_1 - a_2d + c_2b)e_1\\
+	&+ (ra_2 + sc_2 + a_1d - c_1b)e_2\\
+	&+ (a_1c_2 - a_2c_1)e_1e_2.
+	\end{align*}
+	Often, we'll be interested in \emph{even} multivectors, i.e., linear combinations of zero-vectors, bivectors, four-vectors, etc. The product of even multivectors
+	\begin{align*}
+	m &= a + be_1e_2 = a + bI,\\
+	n &= c + de_1e_2 = c + dI
+	\end{align*}
+	is
+	\[
+	mn = (ac - bd) + (ad + bc)I.
+	\]
+	The correspondence to complex numbers is clear. From this perspective, the $i$ from complex algebra can be thought of as a counterclockwise-oriented plane.
+	
+	Unit psuedoscalars satisfy $I^2 = -1$. For this, we define the \emph{reverse} operator on multivectors, which reverses the order of basis vectors. The reverse of $I$ is
+	\[
+	\tilde{I} = e_3e_2e_1 = -I.
+	\]
+	The square of a multivector is defined by multiplying a multivector by its reverse. For example,
+	\[
+	I^2 = \tilde{I}I = e_3e_2e_1(e_1e_2e_3) = -1.
+	\]
+	We can use $I$ to compute the \emph{dual} of a multivector simply by multiplying. The dual $M$ of a multivector $m$ is
+	\[
+	M = Im.
+	\]
+	For example,
+	\[
+	Ie_2 = (e_1e_2)e_2 = e_1.
+	\]
+	If $m$ spans a subspace of Euclidean 2-space, its dual spans the remaining subspace needed to fill out 2-space. This is the same as the orthogonal complement in linear algebra.
+	
+	\subsection{$U(1)$ as a Geometric Algebra}
+	In later chapters, we'll discuss the implications of symmetries in field theories. Some of these symmetries will involve unitary groups, so we show how unitary groups can be represented with geometric algebras. 
+	
+	Unitary groups $U(n)$ are groups of $n \times n$ unitary matrices, i.e., matrices $U$ where $U^\dagger U = I$. For $n = 1$, this is the group of unit complex numbers. As shown above, this group equivalent to the group of even multivectors in Euclidean 2-space of unit magnitude.
+	
+	\section{3D Euclidean Space and $SU(2)$}
+	\subsection{Geometric Algebra of Euclidean 2-Space}
+	
+	Multivectors are composed of \emph{basis 1-vectors}. In three-dimensional Euclidean space, these are unit factors along the positive $x$, $y$, and $z$ axes. They are denoted by $e_1$, $e_2$, and $e_3$, respectively (the use of $e$ is shorthand for Euclidean. Different symbols will be used for bases in other algebras).
+	
+	The most important operation between multivectors is the \emph{geometric product}. If $a$ and $b$ are multivectors, the geometric product of $a$ and $b$ is written $ab$. The geometric product is the sum of two simpler products, the \emph{dot} (inner) and \emph{wedge} (outer) products. In three-dimensional Euclidean space, these are equivalent to the familiar dot and cross products of vector algebra. The dot product of $a$ and $b$ is written $a \cdot b$ and the wedge product is written $a \wedge b$. The geometric product, then, is written
+	\[
+		ab = a \cdot b + a \wedge b.
+	\]	
+	The inner products of basis one-vectors amongst themselves defines the \emph{signature} of an algebra. In Euclidean 3-space, the basis vectors are \emph{orthogonal},	
+	\begin{align*}
+		e_1 \cdot e_1 & = 1\\
+		e_2 \cdot e_2 & = 1\\
+		e_3 \cdot e_3 & = 1\\		
+		e_1 \cdot e_2 & = 0\\
+		e_2 \cdot e_3 & = 0\\
+		e_3 \cdot e_2 & = 0.
+	\end{align*}	
+	Basis one-vectors represent directed unit lines. Directed planes can be made by wedging one-vectors together to form basis \emph{bivectors}.	
+	\begin{align*}		
+		e_1 \wedge e_2 & = x\text{-}y\text{ plane, normal along }+z\\
+		e_2 \wedge e_3 & = y\text{-}z\text{ plane, normal along }+x\\
+		e_3 \wedge e_1 & = z\text{-}x\text{ plane, normal along }+y\\
+		e_1 \wedge e_1 & = 0\\
+		e_2 \wedge e_2 & = 0\\
+		e_3 \wedge e_2 & = 0
+	\end{align*}
+	Planes can be flipped by reversing the wedge product.
+	\begin{align*}		
+	e_2 \wedge e_1 & = -e_1 \wedge e_2 = x\text{-}y\text{ plane, normal along }-z\\
+	e_3 \wedge e_2 & = -e_2 \wedge e_3 = y\text{-}z\text{ plane, normal along }-x\\
+	e_1 \wedge e_3 & = -e_3 \wedge e_1 = z\text{-}x\text{ plane, normal along }-y.
+	\end{align*}
+	Since unit vectors are orthogonal,
+	\begin{align*}
+	e_ie_j & = e_i \cdot e_j + e_i \wedge e_j = 1 & (i = j)\\
+	e_ie_j & = e_i \cdot e_j + e_i \wedge e_j = e_i \wedge e_j & (i \ne j)
+	\end{align*}
+	explicit dots and wedges are unnecessary when writing basis vectors, e.g., we simply write $e_1e_2$ instead of $e_1 \wedge e_2$.
+	
+	The unit volume is the wedge product of all three basis one-vectors,
+	\[
+	e_1e_2e_3 = e_1 \wedge e_2 \wedge e_3.  
+	\]
+	As with bivectors, permuting the order of vectors in the product changes orientation. Every swap changes the orientation by a minus sign,
+	\[
+	e_1e_2e_3 = -e_1e_3e_2 = -e_2e_1e_3 = e_2e_3e_1 = -e_3e_2e_1 = e_3e_1e_2.
+	\]
+	
+	A general multivector $m$ in Euclicean 3-space is a scalar plus a linear combination of basis vectors,
+	\[
+	m = s + a_1e_1 + a_2e_2 + a_3e_3 + b_1e_2e_3 + b_2e_3e_1 + b_3e_1e_2 + ce_1e_2e_3.
+	\] 
+	\subsection{$SU(2)$ as a Geometric Algebra}
+	
+	\section{Minkowski Spacetime}
