@@ -24,20 +24,27 @@
 	
 	\subsubsection{Vector-valued Functions}
 	
-	Now consider a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2.$ It's derivative is
+	Consider a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2.$ It's derivative is
 	
 	\begin{align*}
 	\nabla g & = \left(e_1\partial_x + e_2\partial_y \right) \left(ue_1 + ve_2 \right) \\
 	 & = \left( \partial_x u + \partial_y v\right) + \left( \partial_x v - \partial_y u\right)e_1e_2,  
 	\end{align*}
 	
-	i.e., the derivative of a vector-valued function in Euclidean 2-space is the complex derivative. From this example, we see that geometric derivatives have inner and outer products,
+	i.e., the derivative of a vector-valued function in Euclidean 2-space is the complex derivative. Grouping terms above, we see that, because of the geometric product, geometric derivatives separate into inner (gradient) and outer (curl) products,
 	
 	\[
-	\nabla F = \nabla \cdot F + \nabla \wedge F.
+	\nabla g = \nabla \cdot g + \nabla \wedge g.
 	\]
 	
 	The geometric derivative contains both divergence and curl from traditional vector calculus.
+	
+	\subsubsection{Bivector-valued Functions}
+	
+	Given $f(x,y)e_1e_2$,
+	\[
+	\nabla f = \left(\partial_x f\right) e_2 - \left(\partial_y f\right) e_1.
+	\]
 	
 	\subsection{Euclidean 3-Space}
 	
@@ -53,6 +60,66 @@
 	
 	\subsubsection{Vector-valued Functions}
 	
+	Given a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2 + w\left( x, y\right)e_3.$ It's derivative is
+	
+	\begin{align*}
+	\nabla g & = \left(e_1\partial_x + e_2\partial_y + e_3\partial_z\right) \left(ue_1 + ve_2 + we_3\right) \\
+	& = \left( \partial_x u + \partial_y v + \partial_z w\right) + \\
+	& = \left( \partial_x v - \partial_y u\right)e_1e_2 + \\
+	& = \left( \partial_y w - \partial_z v\right)e_2e_3 + \\
+	& = \left( \partial_z u - \partial_x w\right)e_3e_1.
+	\end{align*}
+	
 	\subsection{Minkowski Spacetime}
+	
+	\section{Gauge Covariant Derivative}
+	
+	In field theories, symmetries of the Lagrangian for the system determine the kinematic equations for that system. Consider a field theory in $\psi\left(x\right)$ with the following Lagrangian,
+	
+	\[
+	\mathcal{L} = \overline{\psi} D \psi.
+	\]
+	
+	Here, $D$ is a derivative operator. We'd like this Lagrangian to be invariant under the following field transformations,
+	
+	\[
+	\psi' = e^{-\lambda}\psi,
+	\]
+	
+	so that
+	
+	\[
+	\mathcal{L} = \overline{\psi} D \psi = \overline{\psi}' D' \psi'.
+	\]
+	
+	Transformations can be \emph{global}, where $\lambda$ is constant, or \emph{local}, where $\lambda$ is a function of $x$. We only consider local transformations here. Expanding the right side,
+	
+	\[
+	\overline{\psi}' D' \psi' = \overline{\psi}e^{\lambda} D'e^{-\lambda}\psi.
+	\]
+	
+	So $D$ transforms, $D' = e^{-\lambda} De^{\lambda}.$
+	
+	If we let $D = \partial$, the derivative product rule breaks invariance,	
+	\begin{align*}
+	\mathcal{L} &= \overline{\psi}' D \psi' \\
+	&= \overline{\psi}' \partial \psi' \\
+	&= \overline{\psi}e^{\lambda} \partial e^{-\lambda}\psi \\
+	&= \left(\overline{\psi}e^{\lambda}\right) e^{-\lambda}\left(\left(\partial\psi\right) - \left(\partial\lambda\right)\psi\right) \\
+	&= \overline{\psi}\partial\psi - \overline{\psi}\left(\partial\lambda\right)\psi.
+	\end{align*} 
+	
+	There's an extra $\overline{\psi}\left(\partial\lambda\right)\psi$ term, the \emph{gauge} term. The usual way to offset this is to add a \emph{gauge field} $A$ from $D$, then determine its transformation properties. Letting $D = \partial + A$, invariance requires
+	
+	\begin{align*}
+	D' &= \partial + A' \\
+	&= e^{-\lambda}De^{\lambda}\\
+	&=e^{-\lambda}\left(\partial + A\right)e^{\lambda} \\
+	&= e^{-\lambda}\left(e^{\lambda}\partial\lambda + e^{\lambda}\partial + Ae^{\lambda}\right)\\
+	&= \partial + \left(e^{-\lambda}Ae^{\lambda}+\partial\lambda\right).
+	\end{align*}
+	
+	This shows the gauge field transforms $A' = e^{-\lambda}Ae^{\lambda}+\partial\lambda.$
+	
 	
 	\section{Cauchy's Integral Theorem and Formula}
