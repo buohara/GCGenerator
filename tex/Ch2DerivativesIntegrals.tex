@@ -12,7 +12,7 @@
 	
 	\subsection{Euclidean 2-Space}
 	
-	\subsubsection{Real-valued Functions}
+	\subsubsection{Real Functions}
 	
 	Consider a real-valued function $f$ over $x$ and $y$ in Euclidean 2-space. Its geometric derivative is
 	
@@ -22,83 +22,94 @@
 	
 	i.e., the geometric derivative of a real-valued function is its gradient.
 	
-	\subsubsection{Vector-valued Functions}
+	\subsubsection{Vector Functions}
 	
-	Consider a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2.$ It's derivative is
-	
+	Consider a vector-valued function $g = u e_1 + ve_2.$ It's derivative is
 	\begin{align*}
 	\nabla g & = \left(e_1\partial_x + e_2\partial_y \right) \left(ue_1 + ve_2 \right) \\
-	 & = \left( \partial_x u + \partial_y v\right) + \left( \partial_x v - \partial_y u\right)e_1e_2,  
-	\end{align*}
-	
-	i.e., the derivative of a vector-valued function in Euclidean 2-space is the complex derivative. Grouping terms above, we see that, because of the geometric product, geometric derivatives separate into inner (gradient) and outer (curl) products,
-	
+	 & = \left( \partial_x u + \partial_y v\right) + \left( \partial_x v - \partial_y u\right)e_1e_2. 
+	\end{align*}	
+	In other words, the derivative of a vector-valued function in Euclidean 2-space is the complex derivative. In particular, we see that the geometric derivatives separates into inner (gradient) and outer (curl) products,
 	\[
 	\nabla g = \nabla \cdot g + \nabla \wedge g.
 	\]
-	
 	The geometric derivative contains both divergence and curl from traditional vector calculus.
 	
-	\subsubsection{Bivector-valued Functions}
+	\subsubsection{Bivector (Pseudoscalar) Functions}
 	
-	Given $f(x,y)e_1e_2$,
+	For $fe_1e_2$,
 	\[
 	\nabla f = \left(\partial_x f\right) e_2 - \left(\partial_y f\right) e_1.
 	\]
 	
 	\subsection{Euclidean 3-Space}
 	
-	\subsubsection{Real-valued Functions}
+	\subsubsection{Real Functions}
 	
 	The geometric derivative acting on a real-valued function $f$ in 3-space is
-	
 	\[
 	\nabla f = \left( \partial_x f\right) e_1  + \left( \partial_y f\right) e_2 + \left( \partial_z f\right) e_3.
 	\]
-	
 	Again, this is simply the gradient of $f$.
 	
-	\subsubsection{Vector-valued Functions}
+	\subsubsection{Vector Functions}
 	
-	Given a vector-valued function $g\left( x, y\right) = u \left( x, y\right)e_1 + v\left( x, y\right)e_2 + w\left( x, y\right)e_3.$ It's derivative is
-	
+	Given a vector-valued function $g = u e_1 + ve_2 + we_3.$ Its derivative is	
 	\begin{align*}
 	\nabla g & = \left(e_1\partial_x + e_2\partial_y + e_3\partial_z\right) \left(ue_1 + ve_2 + we_3\right) \\
 	& = \left( \partial_x u + \partial_y v + \partial_z w\right) + \\
 	& = \left( \partial_x v - \partial_y u\right)e_1e_2 + \\
 	& = \left( \partial_y w - \partial_z v\right)e_2e_3 + \\
 	& = \left( \partial_z u - \partial_x w\right)e_3e_1.
+	\end{align*}	
+	\subsubsection{Bivector Functions}
+	A bivector function in 3D Euclidean space has the form
+	\[
+	f = ue_1e_2 + ve_2e_3 + we_3e_1.
+	\]	
+	Its derivative is	
+	\begin{align*}
+	\nabla f &= \left(e_1\partial_x + e_2\partial_y + e_3\partial_z\right) \left(ue_1e_2 + ve_2e_3 + we_3e_1\right) \\
+	&= \left(\partial_zw - \partial_yu\right)e_1 \\
+	&+ \left(\partial_xu - \partial_zv\right)e_2\\
+	&+ \left(\partial_yv - \partial_xw\right)e_3\\
+	&+ \left(\partial_xv + \partial_yw + \partial_zu\right)e_1e_2e_3\\
 	\end{align*}
+	\subsubsection{Pseudoscalar Functions}
+	
+	For $fe_1e_2e_3,$
+	
+	\[
+	\nabla f = \left(e_1\partial_x + e_2\partial_y + e_3\partial_z\right) f = \partial_x fe_2e_3 - \partial_yfe_1e_2 + \partial_zf e_1e_2. 
+	\]
 	
 	\subsection{Minkowski Spacetime}
+	\subsubsection{Real Functions}
+	\subsubsection{Vector Functions}
+	\subsubsection{Bivector Functions}
+	\subsubsection{Pseudovector Functions}
+	\subsubsection{Pseudoscalar Functions}
+	\subsection{Conformal 3-Space}
 	
 	\section{Gauge Covariant Derivative}
 	
-	In field theories, symmetries of the Lagrangian for the system determine the kinematic equations for that system. Consider a field theory in $\psi\left(x\right)$ with the following Lagrangian,
-	
+	In field theories, symmetries of the Lagrangian for the system determine the kinematic equations for that system. Consider a field theory in $\psi\left(x\right)$ with the following Lagrangian,	
 	\[
 	\mathcal{L} = \overline{\psi} D \psi.
-	\]
-	
-	Here, $D$ is a derivative operator. We'd like this Lagrangian to be invariant under the following field transformations,
-	
+	\]	
+	Here, $D$ is a derivative operator. We'd like this Lagrangian to be invariant under the following field transformations,	
 	\[
 	\psi' = e^{-\lambda}\psi,
-	\]
-	
-	so that
-	
+	\]	
+	so that	
 	\[
 	\mathcal{L} = \overline{\psi} D \psi = \overline{\psi}' D' \psi'.
-	\]
-	
-	Transformations can be \emph{global}, where $\lambda$ is constant, or \emph{local}, where $\lambda$ is a function of $x$. We only consider local transformations here. Expanding the right side,
-	
+	\]	
+	Transformations can be \emph{global}, where $\lambda$ is constant, or \emph{local}, where $\lambda$ is a function of $x$. We consider local transformations here. Expanding the right side,	
 	\[
 	\overline{\psi}' D' \psi' = \overline{\psi}e^{\lambda} D'e^{-\lambda}\psi.
-	\]
-	
-	So $D$ transforms, $D' = e^{-\lambda} De^{\lambda}.$
+	\]	
+	So $D$ transforms $D' = e^{-\lambda} De^{\lambda}.$
 	
 	If we let $D = \partial$, the derivative product rule breaks invariance,	
 	\begin{align*}
@@ -107,18 +118,15 @@
 	&= \overline{\psi}e^{\lambda} \partial e^{-\lambda}\psi \\
 	&= \left(\overline{\psi}e^{\lambda}\right) e^{-\lambda}\left(\left(\partial\psi\right) - \left(\partial\lambda\right)\psi\right) \\
 	&= \overline{\psi}\partial\psi - \overline{\psi}\left(\partial\lambda\right)\psi.
-	\end{align*} 
-	
-	There's an extra $\overline{\psi}\left(\partial\lambda\right)\psi$ term, the \emph{gauge} term. The usual way to offset this is to add a \emph{gauge field} $A$ from $D$, then determine its transformation properties. Letting $D = \partial + A$, invariance requires
-	
+	\end{align*} 	
+	There's an extra $\overline{\psi}\left(\partial\lambda\right)\psi$ term, the \emph{gauge} term. The usual way to offset this is to add a \emph{gauge field} $A$ to $D$, then determine its transformation properties. Letting $D = \partial + A$, invariance requires	
 	\begin{align*}
 	D' &= \partial + A' \\
 	&= e^{-\lambda}De^{\lambda}\\
 	&=e^{-\lambda}\left(\partial + A\right)e^{\lambda} \\
 	&= e^{-\lambda}\left(e^{\lambda}\partial\lambda + e^{\lambda}\partial + Ae^{\lambda}\right)\\
 	&= \partial + \left(e^{-\lambda}Ae^{\lambda}+\partial\lambda\right).
-	\end{align*}
-	
+	\end{align*}	
 	This shows the gauge field transforms $A' = e^{-\lambda}Ae^{\lambda}+\partial\lambda.$
 	
 	
