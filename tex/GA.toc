@@ -4,8 +4,8 @@
 \contentsline {subsection}{\numberline {1.1.2}$U\left ( 1\right ) $ as a Geometric Algebra}{5}
 \contentsline {section}{\numberline {1.2}3D Euclidean Space and $SU\left ( 2\right ) $}{6}
 \contentsline {subsection}{\numberline {1.2.1}Geometric Algebra of Euclidean 3-Space}{6}
-\contentsline {subsection}{\numberline {1.2.2}$SU\left ( 2\right ) $ as a Geometric Algebra}{6}
-\contentsline {section}{\numberline {1.3}Minkowski Spacetime}{6}
+\contentsline {subsection}{\numberline {1.2.2}$SU\left ( 2\right ) $ as a Geometric Algebra}{7}
+\contentsline {section}{\numberline {1.3}Minkowski Spacetime}{7}
 \contentsline {section}{\numberline {1.4}Conformal 3-Space}{7}
 \contentsline {chapter}{\numberline {2}Derivatives, Integrals, and Geometric Calculus}{9}
 \contentsline {section}{\numberline {2.1}The Geometric Derivative}{9}
@@ -29,3 +29,6 @@
 \contentsline {section}{\numberline {2.3}Cauchy's Integral Theorem and Formula}{12}
 \contentsline {chapter}{\numberline {3}Yang-Mills Theories}{13}
 \contentsline {chapter}{\numberline {4}Feynman Path Integrals}{15}
+\contentsline {chapter}{\numberline {5}Appendix 1: Calculations and Derivations}{17}
+\contentsline {section}{\numberline {5.1}STA Lagrangian Invariance under $U\left (1\right )$}{17}
+\contentsline {section}{\numberline {5.2}Conserved Currents}{17}

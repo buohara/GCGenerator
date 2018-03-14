@@ -1,0 +1,66 @@
+\chapter{Appendix 1: Calculations and Derivations}
+
+\section{STA Lagrangian Invariance under $U\left(1\right)$}
+
+\section{Conserved Currents}
+
+An important concept in physics is \emph{conservation}, particularly as stated by \emph{Noether's Theorem}. The theorem gives a relationship between symmetries in a system's Lagrangian and conserved quantities like momentum in rigid body mechanics, or probability and spin in quantum mechanics.
+
+Consider a field theory involving a field $\psi$. The Lagrangian for the system is $\mathcal{L}\left(\psi,\partial\psi,x\right).$ First, use the variational principle to determine the equations of motion for this system. The action $S$ for this system is
+\[
+S = \int \mathcal{L}\left(\psi,\partial\psi,x\right).
+\]
+The equations of motion can be derived by setting the variation to zero,
+\[
+\delta S = \delta \int \mathcal{L}\left(\psi,\partial\psi,x\right) = 0.
+\]
+
+The first-order variation $\delta\mathcal{L}$ is
+\begin{align*}
+\delta\mathcal{L} &= \mathcal{L}\left(\psi + \delta\psi,\partial\psi + \delta \left(\partial\psi\right),x + \delta x\right) - \mathcal{L}\left(\psi,\partial\psi,x\right)\\
+&= \frac{\partial\mathcal{L}}{\partial\psi}\delta\psi + \frac{\partial\mathcal{L}}{\partial\left(\partial\psi\right)}\delta \left(\partial\psi\right) + \frac{\partial\mathcal{L}}{\partial x}\delta x.
+\end{align*}
+For this discussion, assume $\partial\mathcal{L}/\partial x = 0$. The variation becomes
+\begin{align*}
+\delta S &= \int \left(\frac{\partial\mathcal{L}}{\partial\psi}\delta\psi + \frac{\partial\mathcal{L}}{\partial\left(\partial\psi\right)}\delta \left(\partial\psi\right)\right)\\
+&=\int \left(\frac{\partial\mathcal{L}}{\partial\psi}\delta\psi + \frac{\partial\mathcal{L}}{\partial\left(\partial\psi\right)}\partial\left(\delta\psi\right)\right).
+\end{align*}
+In the second line, we've used equality of mixed partials, $\delta\left(\partial\psi\right) = \partial\left(\delta\psi\right).$
+
+The two integrand terms are variations in $\delta\psi$ and $\delta\left(\partial\psi\right)$. They can be combined as terms in $\partial\psi$ using the product rule,
+\[
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\delta\psi\right) = \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right)\delta\psi +
+\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\partial\left(\delta\psi\right),
+\]
+so
+\[
+\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\partial\left(\delta\psi\right) = \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\delta\psi\right) -
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right)\delta\psi. 
+\].
+Substituting,
+\[
+\delta S = \int \left(\frac{\partial\mathcal{L}}{\partial\psi}\delta\psi + \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\delta\psi\right) -
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right)\delta\psi\right). 
+\]
+The middle term is vanishes since variations $\delta\psi$ are assumed to be zero on the integration region boundary,
+\[
+\int \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\delta\psi\right) = \frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\delta\psi \bigg\rvert_{\partial\Omega} = 0.
+\]
+Finally, we're left with
+\[
+\delta S = \int \left(\frac{\partial\mathcal{L}}{\partial\psi} -
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right)\right)\delta\psi.
+\]
+A zero variation gives the equations of motion,
+\[
+\frac{\partial\mathcal{L}}{\partial\psi} =
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right).
+\]
+This equation of motion implies a relationship between symmetries and conserved quantities. If the Lagrangian is invariant under some field symmetry, i.e.,
+\[
+\frac{\partial\mathcal{L}}{\partial\psi} = 0,
+\]
+Then the following quantity is conserved,
+\[
+\partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right) = 0.
+\]
