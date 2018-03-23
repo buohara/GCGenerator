@@ -56,7 +56,7 @@ A zero variation gives the equations of motion,
 \frac{\partial\mathcal{L}}{\partial\psi} =
 \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right).
 \]
-This equation of motion implies a relationship between symmetries and conserved quantities. If the Lagrangian is invariant under some field symmetry, i.e.,
+These are called the \emph{Euler-Lagrange} equations. This equation of motion implies a relationship between symmetries and conserved quantities. If the Lagrangian is invariant under some field symmetry, i.e.,
 \[
 \frac{\partial\mathcal{L}}{\partial\psi} = 0,
 \]
@@ -64,3 +64,89 @@ Then the following quantity is conserved,
 \[
 \partial\left(\frac{\partial \mathcal{L}}{\partial\left(\partial\psi\right)}\right) = 0.
 \]
+
+\section{Classical Conservation of Momentum}
+
+The Lagrangian for a particle of mass $m$ in classical mechanics is
+\[
+\mathcal{L} = \frac{p^2}{2m} + V\left(x\right) = \frac{mv^2}{2}+ V\left(x\right).
+\]
+Applying the Euler-Lagrange equations,
+\[
+\frac{d\mathcal{L}}{d x} - \frac{d}{dt}\left(\frac{d\mathcal{L}}{d v}\right) = \frac{dV}{dx}- \frac{d}{dt}\left(mv\right) = \frac{dV}{dx} - \frac{d\left(mv\right)}{dt}.
+\]
+Requiring this to be zero,
+\[
+\frac{d\left(mv\right)}{dt} = \frac{dp}{dt} = \frac{dV}{dx},
+\]
+which is Newton's second law.
+
+For a free particle, $V=0$, and momentum is conserved,
+\[
+\frac{d}{dt}\left(\frac{d\mathcal{L}}{dv}\right) = \frac{dp}{dt} = 0.
+\]
+
+\section{Relativistic Conservation of Energy-Momentum}
+A relativistic spacetime interval is
+\[
+ds^2 = \left(dx^\mu\right)^2.
+\]
+The action for a free particle is
+\[
+S = \int \left(\left(dx^\mu\right)^2\right)^{1/2}
+\]
+with Lagrangian
+\[
+\mathcal{L} = \left(\left(dx^\mu\right)^2\right)^{1/2}.
+\].
+The Euler-Lagrange equations for this system are
+\[
+\frac{\partial\mathcal{L}}{\partial x^\mu} - \frac{d}{d\tau}\left( \frac{\partial\mathcal{L}}{\partial \left(dx^\mu\right)}\right).
+\]
+The first term is zero, and evaluating the second term,
+\begin{align*}
+\frac{d}{d\tau}\left( \frac{\partial\mathcal{L}}{\partial \left(dx^\mu\right)}\right) &= \frac{d}{d\tau} \left(\frac{dx^\mu}{\left(\left(dx^\mu\right)^2\right)^{1/2}}\right)\\ 
+&= \frac{d}{d\tau}\left(\gamma dx^\mu\right) \\
+&= \frac{dp}{d\tau} \\
+&= 0.
+\end{align*}
+\section{Conservation of Probability in Schrodinger Theory}
+The Schrodinger equation for a free particle is
+\[
+\frac{\partial\psi}{\partial t} = i\left(\frac{1}{2m}\nabla^2\right)\psi.
+\]
+Complex conjugation gives the adjoint Schrodinger equation,
+\[
+\frac{\partial\psi^*}{\partial t} = -i\left(\frac{1}{2m}\nabla^2\right)\psi^*.
+\]
+Probability normalization requires
+\[
+\int_\Omega \psi^*\psi \: dx = 1,
+\]
+which is conserved through time,
+\[
+\frac{\partial}{\partial t} \int_\Omega \psi^*\psi \: dx = \int_\Omega \left(\frac{\partial \psi^*}{\partial t}\psi + \psi^*\frac{\partial \psi}{\partial t}\right) \: dx = 0.
+\]
+Using the Schrodinger equation and its adjoint to substitute for $\partial \psi /\partial t$ and $\partial \psi^* /\partial t$,
+\begin{align*}
+\int_\Omega \left(\frac{\partial \psi^*}{\partial t}\psi + \psi^*\frac{\partial \psi}{\partial t}\right) \: dx & \\
+= \frac{i}{2m}\int_\Omega\left(\psi^*\nabla^2\psi - \psi\nabla^2\psi^*\right) \: dx.
+\end{align*}
+This can be simplified noting
+\begin{align*}
+\nabla\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right) & \\
+= \left(\nabla\psi^*\right)\left(\nabla\psi\right) + \psi^*\left(\nabla^2\psi\right) - \left(\nabla\psi\right)\left(\nabla\psi^*\right) - \psi\left(\nabla^2\psi^*\right) &\\
+=\psi^*\nabla^2\psi - \psi\nabla^2\psi^*.
+\end{align*}
+Substituting,
+\begin{align*}
+&\frac{i}{2m}\int_\Omega\left(\psi^*\nabla^2\psi - \psi\nabla^2\psi^*\right) \: dx \\
+=&\: \frac{i}{2m}\int_\Omega\nabla\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right) \: dx \\
+=&\: \frac{i}{2m}\int_{\partial\Omega}\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right) \: dx.
+\end{align*}
+\section{Derivative of General STA Versor}
+An STA versor $\psi$ has 8 components,
+\[
+\psi = \alpha + \beta + \gamma,
+\]
+where $\alpha$ is a scalar, $\beta$ is a bivector, and $\gamma$ is a pseudoscalar.

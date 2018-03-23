@@ -32,3 +32,7 @@
 \contentsline {chapter}{\numberline {5}Appendix 1: Calculations and Derivations}{17}
 \contentsline {section}{\numberline {5.1}STA Lagrangian Invariance under $U\left (1\right )$}{17}
 \contentsline {section}{\numberline {5.2}Conserved Currents}{17}
+\contentsline {section}{\numberline {5.3}Classical Conservation of Momentum}{19}
+\contentsline {section}{\numberline {5.4}Relativistic Conservation of Energy-Momentum}{19}
+\contentsline {section}{\numberline {5.5}Conservation of Probability in Schrodinger Theory}{20}
+\contentsline {section}{\numberline {5.6}Derivative of General STA Versor}{21}
