@@ -144,9 +144,76 @@ Substituting,
 =&\: \frac{i}{2m}\int_\Omega\nabla\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right) \: dx \\
 =&\: \frac{i}{2m}\int_{\partial\Omega}\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right) \: dx.
 \end{align*}
+The probability continuity equation can be obtained by letting,
+\[
+\rho = \psi^*\psi
+\]
+and
+\[
+J=-\frac{i}{2m}\left(\psi^*\nabla\psi - \psi\nabla\psi^*\right),
+\]
+where $rho$ is probability density and $J$ is probability current. Combining the integrals above,
+\begin{align*}
+& \int_\Omega \frac{\partial}{\partial t}\left(\psi^*\psi\right) \: dx - \frac{i}{2m}\int_\Omega \nabla \left(\psi^*\nabla\psi - \psi\nabla\psi^*\right)\: dx \\ 
+=& \int_\Omega \left(\frac{\partial \rho}{\partial t} + \nabla J\right) \: dx.
+\end{align*}
+\section{Conservation of Probability in Dirac Theory}
+Probability conservation in Schrodinger theory can be made relativistically invariant by modifying the probability density,
+\[
+\rho = \psi^*\psi \rightarrow \psi^*\partial_t\psi - \psi \partial_t\psi^*. 
+\]
+We can now combine this to form probability 4-current,
+\[
+J^\mu = \psi^*\partial_\mu\psi - \psi \partial_\mu\psi^*.
+\]
 \section{Derivative of General STA Versor}
 An STA versor $\psi$ has 8 components,
 \[
 \psi = \alpha + \beta + \gamma,
 \]
 where $\alpha$ is a scalar, $\beta$ is a bivector, and $\gamma$ is a pseudoscalar.
+\section{Cauchy's, Green's, and Stokes' Integral Theorems}
+\subsection{Euclidean 2-Space}
+To map complex variable theory to geometric algebra, use the correspondence $i\leftrightarrow e_1e_2$,
+\begin{align*}
+f = u + iv &\leftrightarrow u + v\;e_1e_2\\
+\partial_z = \partial_x + i\partial_y &\leftrightarrow \partial_x + \partial_y\;e_1e_2\\
+dz = dx + idy &\leftrightarrow dx + dy\;e_1e_2.
+\end{align*}
+Consider the integral of $f$ around a region $\Omega$ bounded by $\gamma$,
+\begin{align*}
+\int_\gamma f\;dz &= \int_\gamma \left(u + v\;e_1e_2\right)\left(dx + dy\;e_1e_2\right)\\
+&= \int_\gamma \left(u\;dx - v\;dy\right) + \left(v\;dx + u\;dy\right)\;e_1e_2.
+\end{align*}
+Comparing with $df/dz$ integrated over $\Omega$,
+\begin{align*}
+\int_\Omega \frac{df}{dz}\;dA &= \int_\Omega \left(\partial_x + \partial_y\;e_1e_2\right)\left(u + v\;e_1e_2\right)\;dxdy\;e_1e_2\\
+&= \int_\Omega \left(\left(\partial_x u - \partial_y v\right) +\left(\partial_x v + \partial_y u\right)\;e_1e_2\right)\;dxdy\;e_1e_2\\
+&= \int_\Omega \left(\left(\partial_x u - \partial_y v\right)\;e_1e_2 - \left(\partial_x v + \partial_y u\right)\right)\;dxdy.
+\end{align*}
+By Green's Theorem,
+\begin{align*}
+\int_\gamma \left(u\;dx - v\;dy\right) &= -\int_\Omega \left(\partial_x v + \partial_y u\right)\;dxdy\\
+\int_\gamma \left(v\;dx + u\;dy\right) &= \int_\Omega \left(\partial_x u - \partial_y v\right)\;dxdy,
+\end{align*}
+and so
+\[
+\int_\gamma f \; dz = \int_\Omega \frac{df}{dz}\;dA.
+\]
+Using $i \leftrightarrow e_1e_2$ is cumbersome. Instead, let
+\begin{align*}
+f &= u\;e_1 + v\;e_2 \\
+\nabla &= \partial_x\;e_1 + \partial_y \; e_2 \\
+dz &= dx\;e_1 + dy\;e_2
+\end{align*}
+Now we have
+\begin{align*}
+\int_\gamma f\;dz &= \int_\gamma \left(u\;e_1 + v\;e_2\right)\left(dx\;e_1 + dy\;e_2\right)\\
+&= \int_\gamma \left(u\;dx + v\;dy\right) - \left(v\;dx - u\;dy\right)\;e_1e_2
+\end{align*}
+and
+\begin{align*}
+\int_\Omega \nabla f\;dA &= \int_\Omega \left(\partial_x\;e_1 + \partial_y\;e_2\right)\left(u\;e_1 + v\;e_2\right)\;dxdy\;e_1e_2\\
+&= \int_\Omega \left(\left(\partial_x u + \partial_y v\right) +\left(\partial_x v - \partial_y u\right)\;e_1e_2\right)\;dxdy\;e_1e_2\\
+&= \int_\Omega \left(\left(\partial_x u + \partial_y v\right)\;e_1e_2 - \left(\partial_x v - \partial_y u\right)\right)\;dxdy.
+\end{align*}
