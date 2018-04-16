@@ -2,11 +2,11 @@
 
 	\section{The Geometric Derivative}
 	
-	Geometric Algebra is extended to Geometric Calculus by adding geometric derivatives and integrals. The geometric derivative is denoted by $\nabla$ and acts on multivector-valued functions over a given domain. In summation notation, the geometric derivative of a function $F$ is:	
+	Geometric Algebra is extended to Geometric Calculus by adding geometric derivatives and integrals. The geometric derivative is denoted by $\nabla$.	
 	\[
 	\nabla F\left( x\right)  = e_i\partial_i F \left( x\right).
 	\]	
-	The following sections demonstrate the geometric derivative in example spaces.
+	The following sections demonstrate the geometric derivative in various spaces to give a practical sense of its usage. Then, we examine discrete \emph{simplicial} calculus and show how its limits produce the geometric derivative and fundamental calculus theorems like Stokes' and Cauchy's Theorems. Finally, we examine the theory of Green's functions. 
 	
 	\subsection{Euclidean 2-Space}
 	
@@ -122,6 +122,66 @@
 	\end{align*}	
 	This shows the gauge field transforms $A' = e^{-\lambda}Ae^{\lambda}+\partial\lambda.$
 	
+	\section{Simplices}
+	
+	To derive integral formulas for geometric calculus, we need to cast the regions over which functions are integrated into the formalism of geometric algebra. For example, the 1D integral of $f$ along a path $\gamma$ is written
+	\[
+	\int_\gamma f\;dx.
+	\]
+	It's important to note that the differential $dx$ encodes a \emph{direction} along the positive $x$ axis. Reversing the direction of $dx$ reverses the sign of entire integral.
+	
+	Similarly, if a function $g$ is defined over two-dimensional region $\Omega$, its integral is
+	\[
+	\int_\Omega g\;dxdy.
+	\]
+	Again, the differential $dxdy$ has a direction. Reversing it, $dydx = -dxdy$, changes the overall sign of the integral. This suggests that regions over which functions are integrated carry geometric content.
+	
+	A \emph{simplex} $a\left(k\right)$ is an oriented $k$-dimensional volume defined by the set of $k + 1$ points $\left(a_0, ... , a_k\right)$. In one dimension, a simplex $a\left(1\right)$ is a directed line segment between two points, $a_1 - a_0$, with volume $|a_1 - a_0|$.
+	
+	In two dimensions, 	
+	\[
+	a\left(2\right) = \left(a_1 - a_0\right)\wedge\left(a_2 - a_0\right)
+	\]
+	Its volume, 
+	\[
+	|a\left(2\right)| = \frac{1}{2}|\left(a_1 - a_0\right) \wedge \left(a_2 - a_0\right)|.
+	\]
+	Generally,
+	\[
+	a\left(k\right) = \left(a_1 - a_0\right)\wedge ... \wedge\left(a_k - a_0\right)
+	\]
+	and volume,
+	\[
+	|a\left(k\right)| = \frac{1}{k!}|\left(a_1 - a_0\right) \wedge...\wedge \left(a_k - a_0\right)|.
+	\]
+	For tidiness of notation, let $\overline{a_k} = a_k - a_0$, or an edge of a simplex. A simplex in two dimensions can be written
+	\[
+	a\left(2\right) = \frac{1}{2}\;\overline{a_1} \wedge \overline{a_2}. 
+	\] 	
+	A \emph{chain} of simplices $\mathcal{C}$ is a collection simplices $a^j\left(k\right)$, typically with edges or faces shared amongst simplices to form connected regions.
+	
+	We can approximate an integral of a function $g$ over a region $\Omega$ by breaking $\Omega$ up into a chain of simplices and taking the product of $g$ with each simplex $a^j$, evaluated at one point on that simplex,
+	\[
+	\sum g\left(a^j_0\right) a^j.
+	\]
+	Consider the following sum of $f=u\;e_1 + v\;e_2$ over a square region $\Omega$ with boundary $\partial\Omega$ formed the by the chain $\mathcal{C}$ formed by simplices
+	\begin{align*}
+	a^0 &= \Delta x\;e_1 = \overline{a_1}^0 \\
+	a^1 &= \Delta y\;e_2 =\overline{a_1}^1 \\
+	a^2 &= -\Delta x\;e_1 =\overline{a_1}^2 \\
+	a^3 &= -\Delta y\;e_2 =\overline{a_1}^3
+	\end{align*}
+	Summing $f$ over this region,
+	\[
+	\sum_\mathcal{C} f = \sum f\left(a^i_0\right) \overline{a_1}^i.	
+	\]
+	Expanding the sum,
+	\begin{align*}
+	\sum_\mathcal{C} f &= \left(u\;e_1 + v\;e_2\right)\Delta x\;e_1 \\
+	&+ \left(u\;e_1 + v\;e_2\right)\Delta y\;e_2 \\
+	&- \left(u\;e_1 + v\;e_2\right)\Delta x\;e_1 \\
+	&- \left(u\;e_1 + v\;e_2\right)\Delta y\;e_2.
+	\end{align*}
 	
 	\section{Cauchy's Integral Theorem and Formula}
 	
