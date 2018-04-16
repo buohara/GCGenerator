@@ -164,7 +164,13 @@
 	\[
 	\sum g\left(a^j_0\right) a^j.
 	\]
-	Consider the following sum of $f=u\;e_1 + v\;e_2$ over a square region $\Omega$ with boundary $\partial\Omega$ formed the by the chain $\mathcal{C}$ formed by simplices
+	An integral definition for the derivative of a function $f$ can be derived using simplex sums. It's motivated by the usual definition of a derivative in one dimension,
+	\[
+	f'\left(x\right) = \lim_{h\rightarrow 0} \frac{f\left(x +h\right) - f\left(x\right)}{h}.
+	\]
+	We evaluate $f$ at the boundary of some region of length $h$, then shrink the boundary. 
+	
+	Consider the following sum of $f=u\;e_1 + v\;e_2$ over a square region $\Omega$ with boundary $\partial\Omega$ formed the by the chain $\mathcal{C}$ formed by simplices in two dimensions
 	\begin{align*}
 	a^0 &= \Delta x\;e_1 = \overline{a_1}^0 \\
 	a^1 &= \Delta y\;e_2 =\overline{a_1}^1 \\
@@ -177,11 +183,29 @@
 	\]
 	Expanding the sum,
 	\begin{align*}
-	\sum_\mathcal{C} f &= \left(u\;e_1 + v\;e_2\right)\Delta x\;e_1 \\
-	&+ \left(u\;e_1 + v\;e_2\right)\Delta y\;e_2 \\
-	&- \left(u\;e_1 + v\;e_2\right)\Delta x\;e_1 \\
-	&- \left(u\;e_1 + v\;e_2\right)\Delta y\;e_2.
+	\sum_\mathcal{C} f &= \left(u\left(a^0_0\right)\;e_1 + v\left(a^0_0\right)\;e_2\right)\Delta x\;e_1 \\
+	&+ \left(u\left(a^1_0\right)\;e_1 + v\left(a^1_0\right)\;e_2\right)\Delta y\;e_2 \\
+	&- \left(u\left(a^2_0\right)\;e_1 + v\left(a^2_0\right)\;e_2\right)\Delta x\;e_1 \\
+	&- \left(u\left(a^3_0\right)\;e_1 + v\left(a^3_0\right)\;e_2\right)\Delta y\;e_2.
 	\end{align*}
+	Taking geometric products and rearranging,
+	\begin{align*}
+	\sum_\mathcal{C} f &= \left(u\left(a^0_0\right) - u\left(a^2_0\right)\right) \Delta x + \left(v\left(a^1_0\right) - v\left(a^3_0\right)\right) \Delta y\\
+	&+ \left(u\left(a^1_0\right) - u\left(a^3_0\right)\right) \Delta y\;e_1e_2 + \left(v\left(a^2_0\right) - v\left(a^0_0\right)\right) \Delta x\;e_1e_2.
+	\end{align*}
+	Dividing through by the volume $|\Omega|=\Delta x\Delta y$,
+	\begin{align*}
+	\frac{\sum_\mathcal{C} f}{|\Omega|} &= \frac{\left(u\left(a^0_0\right) - u\left(a^2_0\right)\right)}{\Delta y} + \frac{\left(v\left(a^1_0\right) - v\left(a^3_0\right)\right)}{\Delta x}\\
+	&+ \frac{\left(u\left(a^1_0\right) - u\left(a^3_0\right)\right)}{\Delta x}\;e_1e_2 + \frac{\left(v\left(a^2_0\right) - v\left(a^0_0\right)\right)}{ \Delta y}\;e_1e_2.
+	\end{align*}
+	In the limit $|\Omega|\rightarrow 0$,
+	\[
+	\lim_{|\Omega|\rightarrow 0}\frac{\sum_\mathcal{C} f}{|\Omega|} = \left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right) + \left(\frac{\partial u}{\partial y} - \frac{\partial v}{\partial x}\right)\;e_1e_2.
+	\]
+	This is the complex derivative. In general, for any dimension,
+	\[
+	\partial f = \lim_{|\Omega|\rightarrow 0} \frac{\sum_{\partial\Omega} f}{|\Omega|}.
+	\]
 	
 	\section{Cauchy's Integral Theorem and Formula}
 	
