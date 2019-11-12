@@ -36,7 +36,7 @@ def WriteIncludes(file, algebra) :
     file.write("using namespace std;\n\n")
 
 # GenerateBasis - Given an algebra signature, generate all basis vectors
-# for this algebra, e.g., [s e1 e2 e1e2].
+# for this algebra, e.g., given [e1 e2], generate [s e1 e2 e1e2].
 #
 # @param signature [in] A list of signs of inner products of basis one-vectors, e.g., [e1^2 e2^2] = [1 1].
 # @param basis     [out] Full basis generated from signature.
@@ -61,8 +61,8 @@ def GenerateBasis(signature, basisVecs) :
 
 # Get parity - Determine sign of permutation required to transform a basis
 # vec into a basis vec with indices in ascending order. E.g., e2e1e3 -> e1e2e3
-# requires 1 swap and has parity -1. Used when determining the sign of basis vector
-# products. 
+# requires 1 swap and has parity -1. Used when determining the signs of basis vector
+# products.
 #
 # @param vec The parity of a vector, e.g., e1e2 = 1 and e2e1 = -1.
 
@@ -101,9 +101,9 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
         return (1, list(vec1))
 
-    # Dot product removes common basis one-vecs of operands. Count swaps to move each
-    # common basic one-vecs to end of first operand and beginning of second operand
-    # and compute running parity.
+    # Dot product removes common basis one-vecs of operands. First, find all common basis
+    # one-vecs. For each common one-vec, count swaps to move it to end of first operand and beginning of 
+    # second operand. For every swap, toggle the sign of the final product.
 
     intsc = set(vec1).intersection(vec2) 
     
@@ -133,7 +133,7 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
             tmp1.append(oneVec)
 
-    # Rearrange resulting vector into ascending form.
+    # Reorder resulting basis vector into ascending form and multiply by its parity.
 
     parity = parity * GetParity(tmp1)
 
@@ -143,8 +143,7 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
     return (parity, tmp1)
 
-# BasisVecOuterProduct - Compute the outer product of two basis vectors
-# in a geometric algebra.
+# BasisVecOuterProduct - Compute the outer product of two basis vectors.
 #
 # @param vec1 [in]
 # @param vec2 [in]
@@ -152,7 +151,7 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
 def BasisVecOuterProduct(vec1, vec2, signature) :
 
-    # Convention here is that outer product with scalar is null.
+    # Convention here is that outer product of vector with scalar is null.
 
     if vec1 == 'S' :
 
@@ -162,13 +161,13 @@ def BasisVecOuterProduct(vec1, vec2, signature) :
 
         return (0, '')
 
-    # Outher product is empty if operands have common basis one-vecs.
+    # Outer product is empty if operands have any common basis one-vecs.
 
     if len(set(vec1).intersection(vec2)) > 0 :
 
         return (0, [])
 
-    # Take union of input vecs and rearrange to ascending form. 
+    # Take union of input vecs and reorder to ascending form. 
 
     tmp1 = list(vec1)
     tmp2 = list(vec2)
@@ -184,7 +183,7 @@ def BasisVecOuterProduct(vec1, vec2, signature) :
     return (parity, tmp1)
 
 # GenerateProductTables - Given an algebra and its basis vectors, generate its
-# inner and outer multiplication tables.
+# inner and outer multiplication tables e.g., dot(e2, e1) = {e1e2, - 1), etc.
 
 def GenerateProductTables(basisVecs, signature, innerProductTable, outerProductTable) :
 
@@ -202,14 +201,14 @@ def GenerateProductTables(basisVecs, signature, innerProductTable, outerProductT
 
         r = r + 1
 
-# FlipProdTables - When doing products, need all pairs of input components that will map to an output component and appropriate sign.
+# FlipProdTables - When doing products, we need all pairs of input components that will map to an output component along with sign.
 # E.g., for complex numbers out.real = in1.real * in2.real - in1.imag * in2.imag, or out[0] = in1[0] * in2[0] - in1[1] * in2[1].
 # Build this table of mappings: {0} : {[0, 0], 1}, {[1, 1], -1}
 #
-# @param innerProductTable
-# @param outerProductTable
-# @param innerProdImg
-# @param outerProdImg
+# @param innerProductTable  [in] Dot product table that maps pairs of input components to an output component.
+# @param outerProductTable  [in] Wedge product table that maps pairs of input components to an output component.
+# @param innerProdImg       [out] For each dot product output component, a list of all pairs of input components that map to it.
+# @param outerProdImg       [out] For each wedge product output component, a list of all pairs of input components that map to it.
 
 def FlipProdTables(innerProductTable, outerProductTable, innerProdImg, outerProdImg):
 
@@ -243,7 +242,7 @@ def WriteOpenMultivecStruct(file, algebra):
     file.write("{\n")
     file.write("    T coeffs[" + str(len(algebra.basis)) + "];\n\n")
 
-# WriteOpenMultiVecStruct -
+# WriteCloseMultiVecStruct -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
