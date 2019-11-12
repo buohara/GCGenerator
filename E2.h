@@ -2,7 +2,7 @@ static const uint32_t numCoeffs = 4;
 
 template<typename T> struct E2MV
 {
-    T coeffs[4];
+    T coeffs[numCoeffs];
 
     E2<T>() { memset(&coeffs[0], 0, numCoeffs * sizeof(T)); }
 
@@ -34,6 +34,39 @@ template<typename T> struct E2MV
     {
         for (uint32_t i = 0; i < numCoeffs; i++)
             coeffs[i] -= rhs.coeffs[i];
+
+        return *this;
+    }
+
+    E2MV<T>& operator|=(const E2MV<T>& rhs)
+    {
+        E2MV<T> tmp = *this;
+
+        coeffs[0] = tmp.coeffs[0] * rhs.coeffs[0] + tmp.coeffs[1] * rhs.coeffs[1] + tmp.coeffs[2] * rhs.coeffs[2] - tmp.coeffs[3] * rhs.coeffs[3];
+        coeffs[1] = tmp.coeffs[0] * rhs.coeffs[1] + tmp.coeffs[1] * rhs.coeffs[0] - tmp.coeffs[2] * rhs.coeffs[3] + tmp.coeffs[3] * rhs.coeffs[2];
+        coeffs[2] = tmp.coeffs[0] * rhs.coeffs[2] + tmp.coeffs[1] * rhs.coeffs[3] + tmp.coeffs[2] * rhs.coeffs[0] - tmp.coeffs[3] * rhs.coeffs[1];
+        coeffs[3] = tmp.coeffs[0] * rhs.coeffs[3] + tmp.coeffs[3] * rhs.coeffs[0];
+
+        return *this;
+    }
+
+    E2MV<T>& operator^=(const E2MV<T>& rhs)
+    {
+        E2MV<T> tmp = *this;
+
+        coeffs[3] = tmp.coeffs[1] * rhs.coeffs[2] - tmp.coeffs[2] * rhs.coeffs[1];
+
+        return *this;
+    }
+
+    E2MV<T>& operator*=(const E2MV<T>& rhs)
+    {
+        E2MV<T> tmp = *this;
+
+        coeffs[0] = tmp.coeffs[0] * rhs.coeffs[0] + tmp.coeffs[1] * rhs.coeffs[1] + tmp.coeffs[2] * rhs.coeffs[2] - tmp.coeffs[3] * rhs.coeffs[3];
+        coeffs[1] = tmp.coeffs[0] * rhs.coeffs[1] + tmp.coeffs[1] * rhs.coeffs[0] - tmp.coeffs[2] * rhs.coeffs[3] + tmp.coeffs[3] * rhs.coeffs[2];
+        coeffs[2] = tmp.coeffs[0] * rhs.coeffs[2] + tmp.coeffs[1] * rhs.coeffs[3] + tmp.coeffs[2] * rhs.coeffs[0] - tmp.coeffs[3] * rhs.coeffs[1];
+        coeffs[3] = tmp.coeffs[0] * rhs.coeffs[3] + tmp.coeffs[3] * rhs.coeffs[0] + tmp.coeffs[1] * rhs.coeffs[2] - tmp.coeffs[2] * rhs.coeffs[1];
 
         return *this;
     }

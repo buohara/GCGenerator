@@ -17,11 +17,13 @@ class Algebra:
         self.dim                = pow(2, len(self.sig))
         self.innerProductTable  = [[0 for x in range(self.dim)] for y in range(self.dim)]
         self.outerProductTable  = [[0 for x in range(self.dim)] for y in range(self.dim)]
-        self.innerProdImg       = []
-        self.outerProdImg       = []
 
         GenerateProductTables(self.basis, self.sig, self.innerProductTable, self.outerProductTable)
-        FlipProdTables(self.innerProductTable, self.outerProductTable, self.innerProdImg, self.outerProdImg)
+
+        self.innerProdImg       = [[] for x in range(self.dim)]
+        self.outerProdImg       = [[] for x in range(self.dim)]
+
+        FlipProdTables(self)
 
 # Write Includes - Write some standard C++ headers to output file.
 #
@@ -45,7 +47,7 @@ def GenerateBasis(signature, basisVecs) :
 
     oneVecs         = []
     basisCounter    = 0
-    basisVecs.append("S")
+    basisVecs.append(["S"])
 
     for item in signature :
 
@@ -56,7 +58,7 @@ def GenerateBasis(signature, basisVecs) :
     for l in range(2, len(signature) + 1) :
 
         for cmb in itertools.combinations(oneVecs, l) :
-      
+
             basisVecs.append(list(cmb))
 
 # Get parity - Determine sign of permutation required to transform a basis
@@ -93,11 +95,11 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
     # Convention here is the inner product of vector with scalar returns scaled vector.
 
-    if vec1 == 'S' :
+    if vec1 == ['S'] :
 
         return (1, list(vec2))
 
-    if vec2 == 'S' :
+    if vec2 == ['S'] :
 
         return (1, list(vec1))
 
@@ -153,11 +155,11 @@ def BasisVecOuterProduct(vec1, vec2, signature) :
 
     # Convention here is that outer product of vector with scalar is null.
 
-    if vec1 == 'S' :
+    if vec1 == ['S'] :
 
         return (0, '')
 
-    if vec2 == 'S' :
+    if vec2 == ['S'] :
 
         return (0, '')
 
@@ -205,13 +207,38 @@ def GenerateProductTables(basisVecs, signature, innerProductTable, outerProductT
 # E.g., for complex numbers out.real = in1.real * in2.real - in1.imag * in2.imag, or out[0] = in1[0] * in2[0] - in1[1] * in2[1].
 # Build this table of mappings: {0} : {[0, 0], 1}, {[1, 1], -1}
 #
-# @param innerProductTable  [in] Dot product table that maps pairs of input components to an output component.
-# @param outerProductTable  [in] Wedge product table that maps pairs of input components to an output component.
-# @param innerProdImg       [out] For each dot product output component, a list of all pairs of input components that map to it.
-# @param outerProdImg       [out] For each wedge product output component, a list of all pairs of input components that map to it.
+# @param algebra            [in] Algebra with inner/outer product tables defined and flipped tables to be populated.
 
-def FlipProdTables(innerProductTable, outerProductTable, innerProdImg, outerProdImg):
+def FlipProdTables(algebra):
 
+    innerProductTable   = algebra.innerProductTable
+    outerProductTable   = algebra.outerProductTable
+    innerProdImg        = algebra.innerProdImg
+    outerProdImg        = algebra.outerProdImg
+
+    for i, row in enumerate(innerProductTable):
+
+        for j, col in enumerate(row):
+
+            basisVec = col[1]
+            sign     = col[0]
+
+            if sign != 0 :
+
+                outIdx = algebra.basis.index(basisVec)
+                innerProdImg[outIdx].append([i, j, sign])
+
+    for i, row in enumerate(outerProductTable):
+
+        for j, col in enumerate(row):
+
+            basisVec = col[1]
+            sign     = col[0]
+
+            if sign != 0 :
+
+                outIdx = algebra.basis.index(basisVec)
+                outerProdImg[outIdx].append([i, j, sign])
 
     return
 
@@ -240,7 +267,7 @@ def WriteOpenMultivecStruct(file, algebra):
     
     file.write("template<typename T> struct " + algebra.name + "MV\n")
     file.write("{\n")
-    file.write("    T coeffs[" + str(len(algebra.basis)) + "];\n\n")
+    file.write("    T coeffs[numCoeffs];\n\n")
 
 # WriteCloseMultiVecStruct -
 #
@@ -306,10 +333,25 @@ def WriteAssignmentOperators(file, algebra):
     WriteAddAssignOperator(file, algebra)
     WriteSubAssignOperator(file, algebra)
 
-    #WriteDotAssignOperator(file, algebra)
-    #WriteWedgeAssignOperator(file, algebra)
-    #WriteMultAssignOperator(file, algebra)
+    WriteDotAssignOperator(file, algebra)
+    WriteWedgeAssignOperator(file, algebra)
+    WriteMultAssignOperator(file, algebra)
     #WriteDivAssignOperator(file, algebra)
+    #WriteMagnitudeOperator(file, algebra)
+    #WriteReverseOperator(file, algebra)
+    #WriteAccessors(file, algebra)
+
+def WriteMagnitudeOperator(file, algebra) :
+
+    return
+
+def WriteReverseOperator(file, algebra) :
+
+    return
+
+def WriteAccessors(file, algebra) :
+
+    return
 
 # WriteAssignOperator -
 #
@@ -320,7 +362,7 @@ def WriteAssignOperator(file, algebra) :
 
     structName = algebra.name + "MV<T>"
 
-    file.write("    " + structName + "& operator=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator=(const " + structName + "& rhs)\n")
     file.write("    {\n")
     file.write("        if (this != &rhs)\n")
     file.write("            memcpy(&coeffs[0], &rhs.coeffs[0], numCoeffs * sizeof(T));\n");
@@ -337,7 +379,7 @@ def WriteAddAssignOperator(file, algebra):
 
     structName = algebra.name + "MV<T>"
 
-    file.write("    " + structName + "& operator+=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator+=(const " + structName + "& rhs)\n")
     file.write("    {\n")
     file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
     file.write("            coeffs[i] += rhs.coeffs[i];\n")
@@ -356,7 +398,7 @@ def WriteSubAssignOperator(file, algebra):
 
     structName = algebra.name + "MV<T>"
 
-    file.write("    " + structName + "& operator-=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator-=(const " + structName + "& rhs)\n")
     file.write("    {\n")
     file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
     file.write("            coeffs[i] -= rhs.coeffs[i];\n")
@@ -373,19 +415,39 @@ def WriteSubAssignOperator(file, algebra):
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
 
-def WriteDotAssignOperators(file, algebra):
+def WriteDotAssignOperator(file, algebra):
 
     structName = algebra.name + "MV<T>"
 
-    file.write("    " + structName + "& operator-=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator|=(const " + structName + "& rhs)\n")
     file.write("    {\n")
-    file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
-    file.write("            coeffs[i] -= rhs.coeffs[i];\n")
+    file.write("        " + structName + " tmp = *this;\n")
     file.write("\n");
+
+    for r, row in enumerate(algebra.innerProdImg):
+
+        if (len(row) == 0) : continue
+
+        file.write("        coeffs[" + str(r) + "] = ")
+
+        for c, col in enumerate(row):
+
+            if col[2] == 1: 
+
+                if c == 0 : file.write("tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" + tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+            else:
+
+                if c == 0 : file.write("-tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" - tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+        file.write(";\n")
+
+    file.write("\n")
     file.write("        return *this;\n")
-    file.write("    }\n\n")
-    
-    return
+    file.write("    }\n")
+    file.write("\n")
 
     return
 
@@ -394,20 +456,39 @@ def WriteDotAssignOperators(file, algebra):
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
 
-def WriteWedgeAssignOperators(file, algebra):
+def WriteWedgeAssignOperator(file, algebra):
 
     structName = algebra.name + "MV<T>"
 
-    prodTbl = algebra.innerProductTable;
-
-    file.write("    " + structName + "& operator|=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator^=(const " + structName + "& rhs)\n")
     file.write("    {\n")
-    file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
-    file.write("        {\n")
-    file.write("            coeffs[i] -= rhs.coeffs[i];\n")
-    file.write("        }\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("\n");
+
+    for r, row in enumerate(algebra.outerProdImg):
+
+        if (len(row) == 0) : continue
+
+        file.write("        coeffs[" + str(r) + "] = ")
+
+        for c, col in enumerate(row):
+
+            if col[2] == 1: 
+
+                if c == 0 : file.write("tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" + tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+            else:
+
+                if c == 0 : file.write("-tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" - tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+        file.write(";\n")
+
+    file.write("\n")
     file.write("        return *this;\n")
-    file.write("    }\n\n")
+    file.write("    }\n")
+    file.write("\n")
 
     return
 
@@ -416,18 +497,47 @@ def WriteWedgeAssignOperators(file, algebra):
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
 
-def WriteMultAssignOperators(file, algebra):
+def WriteMultAssignOperator(file, algebra):
+
+    geomProdTable = algebra.innerProdImg
+
+    for r, row in enumerate(algebra.outerProdImg) :
+
+        for c, col in enumerate(row) :
+
+            geomProdTable[r].append(col)
 
     structName = algebra.name + "MV<T>"
 
-    file.write("    " + structName + "& operator*=(const " + structName + "<T>& rhs)\n")
+    file.write("    " + structName + "& operator*=(const " + structName + "& rhs)\n")
     file.write("    {\n")
-    file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
-    file.write("        {\n")
-    file.write("            coeffs[i] -= rhs.coeffs[i];\n")
-    file.write("        }\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("\n");
+
+    for r, row in enumerate(geomProdTable):
+
+        if (len(row) == 0) : continue
+
+        file.write("        coeffs[" + str(r) + "] = ")
+
+        for c, col in enumerate(row):
+
+            if col[2] == 1: 
+
+                if c == 0 : file.write("tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" + tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+            else:
+
+                if c == 0 : file.write("-tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+                else : file.write(" - tmp.coeffs[" + str(col[0]) + "] * rhs.coeffs[" + str(col[1]) + "]")
+
+        file.write(";\n")
+
+    file.write("\n")
     file.write("        return *this;\n")
-    file.write("    }\n\n")
+    file.write("    }\n")
+    file.write("\n")
 
     return
 
