@@ -25,17 +25,14 @@ class Algebra:
 
         FlipProdTables(self)
 
-# Write Includes - Write some standard C++ headers to output file.
+# WritePreamble - Write some #pragmas and #includes to top of file.
 #
 # @param [in] File to write includes to.
 
-def WriteIncludes(file, algebra) :
+def WritePreamble(file, algebra) :
 
-    file.write("#include <vector>\n")
-    file.write("#include <map>\n")
-    file.write("#include <stdio>\n")
-    file.write("#include <stdint.h>\n\n")
-    file.write("using namespace std;\n\n")
+    file.write("#pragma once\n")
+    file.write("#include <math.h>\n\n")
 
 # GenerateBasis - Given an algebra signature, generate all basis vectors
 # for this algebra, e.g., given [e1 e2], generate [s e1 e2 e1e2].
@@ -57,9 +54,7 @@ def GenerateBasis(signature, basisVecs) :
     
     for l in range(2, len(signature) + 1) :
 
-        for cmb in itertools.combinations(oneVecs, l) :
-
-            basisVecs.append(list(cmb))
+        for cmb in itertools.combinations(oneVecs, l) : basisVecs.append(list(cmb))
 
 # Get parity - Determine sign of permutation required to transform a basis
 # vec into a basis vec with indices in ascending order. E.g., e2e1e3 -> e1e2e3
@@ -95,13 +90,8 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
     # Convention here is the inner product of vector with scalar returns scaled vector.
 
-    if vec1 == ['S'] :
-
-        return (1, list(vec2))
-
-    if vec2 == ['S'] :
-
-        return (1, list(vec1))
+    if vec1 == ['S'] : return (1, list(vec2))
+    if vec2 == ['S'] : return (1, list(vec1))
 
     # Dot product removes common basis one-vecs of operands. First, find all common basis
     # one-vecs. For each common one-vec, count swaps to move it to end of first operand and beginning of 
@@ -109,9 +99,7 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
     intsc = set(vec1).intersection(vec2) 
     
-    if len(intsc) == 0 :
-
-        return (0, [])
+    if len(intsc) == 0 : return (0, [])
 
     tmp1    = list(vec1)
     tmp2    = list(vec2)
@@ -131,17 +119,13 @@ def BasisVecInnerProduct(vec1, vec2, signature) :
 
     for oneVec in tmp2 : 
 
-        if oneVec != '' :
-
-            tmp1.append(oneVec)
+        if oneVec != '' : tmp1.append(oneVec)
 
     # Reorder resulting basis vector into ascending form and multiply by its parity.
 
     parity = parity * GetParity(tmp1)
 
-    if tmp1 == [] : 
-
-        tmp1 = ['S']
+    if tmp1 == [] : tmp1 = ['S']
 
     return (parity, tmp1)
 
@@ -155,19 +139,12 @@ def BasisVecOuterProduct(vec1, vec2, signature) :
 
     # Convention here is that outer product of vector with scalar is null.
 
-    if vec1 == ['S'] :
-
-        return (0, '')
-
-    if vec2 == ['S'] :
-
-        return (0, '')
+    if vec1 == ['S'] : return (0, '')
+    if vec2 == ['S'] : return (0, '')
 
     # Outer product is empty if operands have any common basis one-vecs.
 
-    if len(set(vec1).intersection(vec2)) > 0 :
-
-        return (0, [])
+    if len(set(vec1).intersection(vec2)) > 0 : return (0, [])
 
     # Take union of input vecs and reorder to ascending form. 
 
@@ -176,9 +153,7 @@ def BasisVecOuterProduct(vec1, vec2, signature) :
 
     for oneVec in tmp2 : 
 
-        if oneVec != '' :
-
-            tmp1.append(oneVec)
+        if oneVec != '' : tmp1.append(oneVec)
 
     parity = GetParity(tmp1)
 
@@ -249,9 +224,12 @@ def FlipProdTables(algebra):
 
 def WriteMultivecStruct(file, algebra):
 
+    WritePreamble(file, algebra)
     WriteOpenMultivecStruct(file, algebra)
     WriteConstructors(file, algebra)
     WriteAssignmentOperators(file, algebra)
+    WriteBinaryOperators(file, algebra)
+    WriteMiscFunctions(file, algebra)
     WriteCloseMultivecStruct(file, algebra)
 
 
@@ -285,27 +263,23 @@ def WriteCloseMultivecStruct(file, algebra):
 
 def WriteConstructors(file, algebra):
 
+    structName = algebra.name + "MV<T>"
+
     # Default constructor. All basis vector coefficients set to 0.
 
-    file.write("    " + algebra.name + "<T>() { memset(&coeffs[0], 0, numCoeffs * sizeof(T)); }\n\n")
+    file.write("    " + structName + "() { memset(&coeffs[0], 0, numCoeffs * sizeof(T)); }\n\n")
     
     # Constructor with all coefficients specified.
 
-    file.write("    " + algebra.name + "<T>(");
+    file.write("    " + structName + "(");
 
     for i, basisVec in enumerate(algebra.basis):
 
         vecStr = ""
 
-        for oneVec in basisVec :
-
-            vecStr = vecStr + oneVec
-
+        for oneVec in basisVec : vecStr = vecStr + oneVec
         file.write("T " + vecStr)
-        
-        if i < len(algebra.basis) - 1:
-
-            file.write(", ")
+        if i < len(algebra.basis) - 1: file.write(", ")
 
     file.write(")\n")
     file.write("    {\n")
@@ -314,9 +288,7 @@ def WriteConstructors(file, algebra):
 
         vecStr = ""
 
-        for oneVec in basisVec :
-
-            vecStr = vecStr + oneVec
+        for oneVec in basisVec : vecStr = vecStr + oneVec
 
         file.write("        coeffs[" + str(i) + "] = " + vecStr + ";\n")
 
@@ -332,24 +304,135 @@ def WriteAssignmentOperators(file, algebra):
     WriteAssignOperator(file, algebra)
     WriteAddAssignOperator(file, algebra)
     WriteSubAssignOperator(file, algebra)
-
     WriteDotAssignOperator(file, algebra)
     WriteWedgeAssignOperator(file, algebra)
     WriteMultAssignOperator(file, algebra)
-    #WriteDivAssignOperator(file, algebra)
-    #WriteMagnitudeOperator(file, algebra)
-    #WriteReverseOperator(file, algebra)
-    #WriteAccessors(file, algebra)
+    WriteScalarMultAssignOperator(file, algebra)
+    WriteDivAssignOperator(file, algebra)
+    WriteScalarDivAssignOperator(file, algebra)
+
+# WriteBinaryOperators - 
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
+
+def WriteBinaryOperators(file, algebra) :
+
+    WriteAddOperator(file, algebra)
+    WriteSubOperator(file, algebra)
+    WriteDotOperator(file, algebra)
+    WriteWedgeOperator(file, algebra)
+    WriteMultOperator(file, algebra)
+    WriteScalarMultOperator(file, algebra)
+    WriteDivOperator(file, algebra)
+    WriteScalarDivOperator(file, algebra)
+
+# WriteMiscFunctions - 
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
+
+def WriteMiscFunctions(file, algebra) :
+
+    WriteReverseOperator(file, algebra)
+    WriteAccessors(file, algebra)
+    WriteMagnitudeOperator(file, algebra)
+
+# WriteScalarMultAssignOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
+
+def WriteScalarMultAssignOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + "& operator*=(const T rhs)\n")
+    file.write("    {\n")
+    file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("            coeffs[i] *= rhs;\n")
+    file.write("\n");
+    file.write("        return *this;\n")
+    file.write("    }\n\n")
+
+    return
+
+# WriteScalarDivAssignOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
+
+def WriteScalarDivAssignOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + "& operator/=(const T rhs)\n")
+    file.write("    {\n")
+    file.write("        for (uint32_t i = 0; i < numCoeffs; i++)\n")
+    file.write("            coeffs[i] /= rhs;\n")
+    file.write("\n");
+    file.write("        return *this;\n")
+    file.write("    }\n\n")
+
+    return
+
+# WriteMagnitudeOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
 
 def WriteMagnitudeOperator(file, algebra) :
 
+    structName = algebra.name + "MV<T>"
+
+    file.write("    T Mag()\n")
+    file.write("    {\n")
+    file.write("        T mag = 0.0;\n")
+    file.write("        for (uint32_t i = 0; i < nCoeffs; i++) mag += coeffs[i] * coeffs[i];\n")
+    file.write("        return sqrt(mag);\n")
+    file.write("    }\n\n")
+
     return
+
+# WriteReverseOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
 
 def WriteReverseOperator(file, algebra) :
 
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator~()\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+
+    for i, basisVec in enumerate(algebra.basis) :
+
+        if ((len(basisVec) * (len(basisVec) - 1)) / 2) % 2 == 1 : 
+
+            file.write("        tmp.coeffs[" + str(i) + "] = -tmp.coeffs[" + str(i) + "];\n")
+
+    file.write("\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n\n")
+
     return
 
+# WriteAccessors -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion.
+
 def WriteAccessors(file, algebra) :
+
+    for i, basisVec in enumerate(algebra.basis) :
+
+        accessorName = ""
+        for oneVec in basisVec : accessorName += oneVec
+
+        file.write("    T " + accessorName + "(){ return coeffs[" + str(i) + "]; }\n")
+        file.write("    void " + accessorName + "(T val){ coeffs[" + str(i) + "] = val; }\n\n")
 
     return
 
@@ -370,7 +453,7 @@ def WriteAssignOperator(file, algebra) :
     file.write("        return *this;\n")
     file.write("    }\n\n")
 
-# WriteAddAssignOperator - Write addition operators for general multivectors.
+# WriteAddAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
@@ -386,10 +469,10 @@ def WriteAddAssignOperator(file, algebra):
     file.write("\n");
     file.write("        return *this;\n")
     file.write("    }\n\n")
-    
+
     return
 
-# WriteSubAssignOperator - Write subtraction operators for general multivectors.
+# WriteSubAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
@@ -405,12 +488,10 @@ def WriteSubAssignOperator(file, algebra):
     file.write("\n");
     file.write("        return *this;\n")
     file.write("    }\n\n")
-    
-    return
 
     return
 
-# WriteDotAssignOperator - Write division operators for general multivectors.
+# WriteDotAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
@@ -451,7 +532,7 @@ def WriteDotAssignOperator(file, algebra):
 
     return
 
-# WriteWedgeAssignOperator - Write division operators for general multivectors.
+# WriteWedgeAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
@@ -492,7 +573,7 @@ def WriteWedgeAssignOperator(file, algebra):
 
     return
 
-# WriteMultAssignOperator - Write multiplication operators for general multivectors.
+# WriteMultAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
@@ -503,9 +584,7 @@ def WriteMultAssignOperator(file, algebra):
 
     for r, row in enumerate(algebra.outerProdImg) :
 
-        for c, col in enumerate(row) :
-
-            geomProdTable[r].append(col)
+        for c, col in enumerate(row) : geomProdTable[r].append(col)
 
     structName = algebra.name + "MV<T>"
 
@@ -541,12 +620,177 @@ def WriteMultAssignOperator(file, algebra):
 
     return
 
-# WriteDivAssignOperators - Write division operators for general multivectors.
+# WriteDivAssignOperator -
 #
 # @param file       [in] File to write.
 # @param algebra    [in] Algebra defintion.
 
-def WriteDivAssignOperators(file, algebra):
+def WriteDivAssignOperator(file, algebra):
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + "& operator/=(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + "tmp = ~rhs;\n")
+    file.write("        T mag = rhs.Mag();\n")
+    file.write("        (*this) *= tmp;\n")
+    file.write("        (*this) /= (mag * mag);\n")
+    file.write("        return *this;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteAddOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteAddOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator+(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp += rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteSubOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteSubOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator-(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp -= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteDotOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteDotOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator|(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp |= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteWedgeOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteWedgeOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator^(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp ^= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+
+# WriteMultOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteMultOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator*(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp *= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteScalarMultOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteScalarMultOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator*(const T rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp += rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteDivOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteDivOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator/(const " + structName + "& rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp /= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
+
+    return
+
+# WriteScalarDivOperator -
+#
+# @param file       [in] File to write.
+# @param algebra    [in] Algebra defintion
+
+def WriteScalarDivOperator(file, algebra) :
+
+    structName = algebra.name + "MV<T>"
+
+    file.write("    " + structName + " operator/(const T rhs)\n")
+    file.write("    {\n")
+    file.write("        " + structName + " tmp = *this;\n")
+    file.write("        tmp /= rhs;\n")
+    file.write("        return tmp;\n")
+    file.write("    }\n")
+    file.write("\n");
 
     return
 
@@ -557,7 +801,6 @@ def GenerateAlgebra(algebraName, signature, even) :
 
     file    = open(algebraName + ".h", 'w')
     algebra = Algebra("E2", signature, even);
-
     WriteMultivecStruct(file, algebra);
 
 # Main
