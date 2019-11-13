@@ -7,14 +7,18 @@ class Algebra:
 
     def __init__(self, name, sig, even):
 
+        if even == True : name = name + "_E"
+
         self.name           = name;
         self.sig            = sig;
         self.basis          = []
         self.even           = even
 
-        GenerateBasis(self.sig, self.basis)
+        GenerateBasis(self.sig, self.basis, even)
 
-        self.dim                = pow(2, len(self.sig))
+        if even == True : self.dim = pow(2, len(self.sig) - 1)
+        else : self.dim = pow(2, len(self.sig))
+
         self.innerProductTable  = [[0 for x in range(self.dim)] for y in range(self.dim)]
         self.outerProductTable  = [[0 for x in range(self.dim)] for y in range(self.dim)]
 
@@ -41,8 +45,9 @@ def WritePreamble(file, algebra) :
 #
 # @param signature [in] A list of signs of inner products of basis one-vectors, e.g., [e1^2 e2^2] = [1 1].
 # @param basis     [out] Full basis generated from signature.
+# @param even      [in] Should this algebra only contain even basis vectors.
 
-def GenerateBasis(signature, basisVecs) :
+def GenerateBasis(signature, basisVecs, even) :
 
     oneVecs         = []
     basisCounter    = 0
@@ -51,12 +56,19 @@ def GenerateBasis(signature, basisVecs) :
     for item in signature :
 
         oneVecs.append("E" + str(basisCounter))
-        basisVecs.append(["E" + str(basisCounter)])
+        if even == False : basisVecs.append(["E" + str(basisCounter)])
         basisCounter = basisCounter + 1
     
     for l in range(2, len(signature) + 1) :
 
-        for cmb in itertools.combinations(oneVecs, l) : basisVecs.append(list(cmb))
+        for cmb in itertools.combinations(oneVecs, l) : 
+
+            if even : 
+            
+                if len(cmb) % 2 == 0 or cmb[0] == 'S' : basisVecs.append(list(cmb))
+
+            else :  basisVecs.append(list(cmb))
+
 
 # Get parity - Determine sign of permutation required to transform a basis
 # vec into a basis vec with indices in ascending order. E.g., e2e1e3 -> e1e2e3
@@ -801,10 +813,13 @@ def WriteScalarDivOperator(file, algebra) :
 
 def GenerateAlgebra(algebraName, signature, even) :
 
-    file    = open(algebraName + ".h", 'w')
-    algebra = Algebra("E2", signature, even);
+    algebra = Algebra(algebraName, signature, even);
+    file    = open(algebra.name + ".h", 'w')
     WriteMultivecStruct(file, algebra);
 
 # Main
 
+GenerateAlgebra("E3", [1, 1, 1], False)
+GenerateAlgebra("E3", [1, 1, 1], True)
 GenerateAlgebra("E2", [1, 1], False)
+GenerateAlgebra("E2", [1, 1], True)
