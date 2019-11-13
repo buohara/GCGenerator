@@ -1,6 +1,11 @@
+#pragma once
+#include <math.h>
+#include <stdint.h>
+#include "gcclib.h"
+
 static const uint32_t numCoeffs = 4;
 
-template<typename T> struct E2MV
+template<typename T> struct GCCLIB_API E2MV
 {
     T coeffs[numCoeffs];
 

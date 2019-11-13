@@ -32,7 +32,9 @@ class Algebra:
 def WritePreamble(file, algebra) :
 
     file.write("#pragma once\n")
-    file.write("#include <math.h>\n\n")
+    file.write("#include <math.h>\n")
+    file.write("#include <stdint.h>\n")
+    file.write("#include \"gcclib.h\"\n\n")
 
 # GenerateBasis - Given an algebra signature, generate all basis vectors
 # for this algebra, e.g., given [e1 e2], generate [s e1 e2 e1e2].
@@ -243,7 +245,7 @@ def WriteOpenMultivecStruct(file, algebra):
 
     file.write("static const uint32_t numCoeffs = " + str(algebra.dim) + ";\n\n");
     
-    file.write("template<typename T> struct " + algebra.name + "MV\n")
+    file.write("template<typename T> struct GCCLIB_API " + algebra.name + "MV\n")
     file.write("{\n")
     file.write("    T coeffs[numCoeffs];\n\n")
 
